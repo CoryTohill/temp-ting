@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^start_logging_temps', csrf_exempt(views.start_logging_temps)),
     url(r'^stop_logging_temps', csrf_exempt(views.stop_logging_temps)),
     url(r'^login', csrf_exempt(views.user_login)),
+    url(r'^logout', csrf_exempt(views.user_logout)),
 ]

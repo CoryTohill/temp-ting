@@ -103,3 +103,8 @@ def user_login(request):
 
     else:
         return HttpResponse(status=400)
+
+
+def user_logout(request):
+    logout(request)
+    return HttpResponse(status=200)
