@@ -7,7 +7,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'url', 'username', 'teams_set')
+        fields = ('id', 'url', 'username', 'teams')
 
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
