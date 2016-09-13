@@ -1,6 +1,7 @@
 from rest_framework import routers
 from django.conf.urls import url, include
 from temptingApp import views
+from django.views.decorators.csrf import csrf_exempt
 
 
 router = routers.DefaultRouter()
@@ -12,4 +13,6 @@ router.register(r'users', views.User)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
+    url(r'^start_logging_temps', csrf_exempt(views.start_logging_temps)),
 ]
+# csrf_exempt(views.LoginView.as_view())
