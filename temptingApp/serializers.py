@@ -1,0 +1,31 @@
+from rest_framework import serializers
+from temptingApp.models import Group, TempLog, Temp
+from django.contrib.auth.models import User
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('id', 'url', 'username')
+
+
+class GroupSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Group
+        fields = ('id', 'url', 'name', 'description', 'users')
+
+
+class TempLogSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = TempLog
+        fields = ('id', 'url', 'description', 'start_date', 'total_cook_time', 'group')
+
+
+class TempSerializer(serializers.HyperlinkedModelSerializer):
+    # tracks = TrackSerializer(many=True, read_only=True)
+    class Meta:
+        model = Temp
+        fields = ('id', 'url', 'value', 'created', 'temp_log')
