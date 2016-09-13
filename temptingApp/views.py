@@ -4,19 +4,19 @@ from rest_framework import viewsets
 from .serializers import TeamSerializer, TempLogSerializer, TempSerializer, UserSerializer
 
 
-class TeamList(viewsets.ModelViewSet):
+class Team(viewsets.ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
 
 
-class TempLogList(viewsets.ModelViewSet):
+class TempLog(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
     queryset = TempLog.objects.all()
     serializer_class = TempLogSerializer
 
-class TempList(viewsets.ModelViewSet):
+class Temp(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
@@ -24,7 +24,7 @@ class TempList(viewsets.ModelViewSet):
     serializer_class = TempSerializer
 
 
-class UserList(viewsets.ModelViewSet):
+class User(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
