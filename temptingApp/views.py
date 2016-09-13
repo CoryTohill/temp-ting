@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
 from rest_framework import viewsets
@@ -7,6 +8,7 @@ from yocto_api import *
 from yocto_temperature import *
 from . import models
 import threading, json
+
 
 
 # global threading event
@@ -87,4 +89,22 @@ def start_logging_temps(request):
 
 def stop_logging_temps(request):
     e.set()
+    return HttpResponse(status=200)
+
+
+def user_login(request):
+    data = json.loads(request.body.decode("utf-8"))
+    username = data['username']
+    password = data['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return HttpResponse(user, content_type="application/json", status=200)
+
+    else:
+        return HttpResponse(status=400)
+
+
+def user_logout(request):
+    logout(request)
     return HttpResponse(status=200)
