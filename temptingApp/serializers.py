@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from temptingApp.models import Group, TempLog, Temp
+from temptingApp.models import Team, TempLog, Temp
 from django.contrib.auth.models import User
 
 
@@ -7,13 +7,13 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'url', 'username')
+        fields = ('id', 'url', 'username', 'teams_set')
 
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class TeamSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
-        model = Group
+        model = Team
         fields = ('id', 'url', 'name', 'description', 'users')
 
 
@@ -21,7 +21,7 @@ class TempLogSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TempLog
-        fields = ('id', 'url', 'description', 'start_date', 'total_cook_time', 'group')
+        fields = ('id', 'url', 'description', 'start_date', 'total_cook_time', 'team')
 
 
 class TempSerializer(serializers.HyperlinkedModelSerializer):
