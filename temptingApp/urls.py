@@ -14,5 +14,6 @@ router.register(r'users', views.User)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^start_logging_temps', csrf_exempt(views.start_logging_temps)),
+    url(r'^stop_logging_temps', csrf_exempt(views.stop_logging_temps)),
 ]
 # csrf_exempt(views.LoginView.as_view())

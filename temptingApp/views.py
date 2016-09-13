@@ -82,28 +82,33 @@ def start_logging_temps(request):
     return HttpResponse(status=200)
 
 
+def stop_logging_temps(request):
+
+    e.set()
+    return HttpResponse(status=200)
 
 
-def create_event(request):
-    data = json.loads(request.body.decode("utf-8"))
 
-    name = data["name"]
-    description = data["description"]
-    start_time = data["start_time"]
-    end_time = data["end_time"]
-    max_tickets = data["max_tickets"]
-    venue = Venue.objects.get(pk=data["venue"])
+# def create_event(request):
+#     data = json.loads(request.body.decode("utf-8"))
 
-    try:
-        event_obj = Event(name=name,
-                          description=description,
-                          start_time=start_time,
-                          end_time=end_time,
-                          max_tickets=max_tickets,
-                          venue=venue)
-        event_obj.save()
+#     name = data["name"]
+#     description = data["description"]
+#     start_time = data["start_time"]
+#     end_time = data["end_time"]
+#     max_tickets = data["max_tickets"]
+#     venue = Venue.objects.get(pk=data["venue"])
 
-        return HttpResponse(status=200)
+#     try:
+#         event_obj = Event(name=name,
+#                           description=description,
+#                           start_time=start_time,
+#                           end_time=end_time,
+#                           max_tickets=max_tickets,
+#                           venue=venue)
+#         event_obj.save()
 
-    except IntegrityError:
-        return HttpResponse(status=400)
+#         return HttpResponse(status=200)
+
+#     except IntegrityError:
+#         return HttpResponse(status=400)
