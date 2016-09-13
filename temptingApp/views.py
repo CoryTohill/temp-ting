@@ -10,7 +10,7 @@ import json
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
 from . import models
 
-
+e = threading.Event()
 
 class Team(viewsets.ModelViewSet):
     queryset = Team.objects.all()
@@ -38,21 +38,8 @@ def start_logging_temps(request):
 
     temp_log = models.TempLog.objects.filter(id=temp_log_id)[0]
 
-
-    # def usage():
-    #     scriptname = os.path.basename(sys.argv[0])
-    #     print("Usage:")
-    #     print(scriptname+' <serial_number>')
-    #     print(scriptname+' <logical_name>')
-    #     print(scriptname+' any  ')
-    #     sys.exit()
-
-    def die(msg):
-        sys.exit(msg+' (check USB cable)')
-
     errmsg=YRefParam()
 
-    # if len(sys.argv)<2 :  usage()
 
     target = "THRMCPL1-6F5AC"
 
@@ -62,41 +49,37 @@ def start_logging_temps(request):
 
     # retreive any temperature sensor
     sensor = YTemperature.FirstTemperature()
+
     if sensor is None :
         return HttpResponse(status=400)
+
     else:
-        sensor= YTemperature.FindTemperature(target + '.temperature1')
+        sensor = YTemperature.FindTemperature(target + '.temperature1')
 
     if not(sensor.isOnline()):return HttpResponse(status=400)
 
     # retreive module serial
-    serial=sensor.get_module().get_serialNumber()
+    serial = sensor.get_module().get_serialNumber()
 
 
-    # retreive both channels
+    # retreive channel
     channel1 = YTemperature.FindTemperature(serial + '.temperature1')
     print(channel1.get_currentValue())
 
-    current_temp = round(channel1.get_currentValue())
 
-    models.Temp.objects.create(value=current_temp, temp_log=temp_log)
+    def start_log(e):
+        while not e.isSet():
+            current_temp = round(channel1.get_currentValue())
+            models.Temp.objects.create(value=current_temp, temp_log=temp_log)
+            print(current_temp)
+            e.wait(2)
+            # YAPI.Sleep(1000)
 
-    # test = Temp(value=current_temp,temp_log=temp_log)
-    print("variable", round(channel1.get_currentValue()))
-    # test.save()
+    thread = threading.Thread(target=start_log, args=(e,))
+    # thread = threading.Thread(target=start_log)
+
+    thread.start()
     return HttpResponse(status=200)
-
-
-    # def tempLogger():
-    #     while True:
-    #         print("channel 1/2:  "+ "%2.1f / " % channel1.get_currentValue() + \
-    #                                 # "%2.1f" % channel2.get_currentValue() + \
-    #                                 " deg F (Ctrl-C to stop)")
-    #         YAPI.Sleep(1000)
-
-    # thre = threading.Thread(target=tempLogger)
-    # thre.start()
-
 
 
 
