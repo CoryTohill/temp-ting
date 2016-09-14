@@ -102,13 +102,14 @@ def stop_logging_temps(request):
 
     current_temp_log = models.TempLog.objects.filter(id=temp_log_id)[0]
 
-    print(current_temp_log.start_date)
     total_cook_time = timezone.now() - current_temp_log.start_date
-    print(total_cook_time)
-    models.TempLog.objects.filter(id=temp_log_id).update(total_cook_time=total_cook_time)
 
+    updated_temp_log = models.TempLog.objects.filter(id=temp_log_id).update(total_cook_time=total_cook_time)
+
+    # stop threading event by setting it
     e.set()
-    return HttpResponse(status=200)
+
+    return HttpResponse(updated_temp_log, content_type="application/json", status=200)
 
 
 def user_login(request):
