@@ -1,14 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from .models import Team, TempLog, Temp
 from .serializers import TeamSerializer, TempLogSerializer, TempSerializer, UserSerializer
 from yocto_api import *
 from yocto_temperature import *
 from . import models
 import threading, json
-
 
 
 # global threading event
@@ -19,16 +18,19 @@ e.clear()
 class Team(viewsets.ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
 class TempLog(viewsets.ModelViewSet):
     queryset = TempLog.objects.all()
     serializer_class = TempLogSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
 class Temp(viewsets.ModelViewSet):
     queryset = Temp.objects.all()
     serializer_class = TempSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
 class User(viewsets.ModelViewSet):
