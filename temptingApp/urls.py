@@ -21,6 +21,4 @@ urlpatterns = [
     url(r'^logout', csrf_exempt(views.user_logout)),
     url(r'^calculate_cook_time', csrf_exempt(views.calculate_cook_time)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-
-
 ]

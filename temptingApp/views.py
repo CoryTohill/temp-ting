@@ -149,8 +149,3 @@ def calculate_cook_time(request):
     estimated_cook_time = numpy.polyval(poly_equation, target_temp) * log_interval
 
     return HttpResponse(estimated_cook_time, content_type="application/json", status=200)
-
-
-
-
-
