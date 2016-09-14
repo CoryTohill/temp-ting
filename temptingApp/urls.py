@@ -17,4 +17,6 @@ urlpatterns = [
     url(r'^stop_logging_temps', csrf_exempt(views.stop_logging_temps)),
     url(r'^login', csrf_exempt(views.user_login)),
     url(r'^logout', csrf_exempt(views.user_logout)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
 ]
