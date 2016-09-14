@@ -7,7 +7,8 @@ from .serializers import TeamSerializer, TempLogSerializer, TempSerializer, User
 from yocto_api import *
 from yocto_temperature import *
 from . import models
-import threading, json, numpy
+import threading, json, numpy, datetime
+from django.utils import timezone
 
 
 # global threading event
@@ -43,11 +44,10 @@ class User(viewsets.ModelViewSet):
 
 def start_logging_temps(request):
     data = json.loads(request.body.decode("utf-8"))
-
     thermometer = data["thermometer"]
-    temp_log_id = data["temp_log_id"]
+    description = data["description"]
+    team_id = data["team_id"]
 
-    temp_log = models.TempLog.objects.filter(id=temp_log_id)[0]
 
     # Yocto api error message
     errmsg = YRefParam()
@@ -77,6 +77,10 @@ def start_logging_temps(request):
     if thermometer in [thread.name for thread in threading.enumerate()]:
         return HttpResponse(status=400)
 
+    # create a new TempLog
+    team = models.Team.objects.filter(id=team_id)[0]
+    temp_log = models.TempLog.objects.create(description=description, team=team)
+
     # target method to start a logging thread
     def start_log(e):
         e.clear()
@@ -93,8 +97,19 @@ def start_logging_temps(request):
 
 
 def stop_logging_temps(request):
+    data = json.loads(request.body.decode("utf-8"))
+    temp_log_id = data['temp_log_id']
+
+    current_temp_log = models.TempLog.objects.filter(id=temp_log_id)[0]
+
+    total_cook_time = timezone.now() - current_temp_log.start_date
+
+    updated_temp_log = models.TempLog.objects.filter(id=temp_log_id).update(total_cook_time=total_cook_time)
+
+    # stop threading event by setting it
     e.set()
-    return HttpResponse(status=200)
+
+    return HttpResponse(updated_temp_log, content_type="application/json", status=200)
 
 
 def user_login(request):
