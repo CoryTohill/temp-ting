@@ -7,7 +7,7 @@ from .serializers import TeamSerializer, TempLogSerializer, TempSerializer, User
 from yocto_api import *
 from yocto_temperature import *
 from . import models
-import threading, json
+import threading, json, numpy
 
 
 # global threading event
@@ -110,3 +110,23 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return HttpResponse(status=200)
+
+
+def time_remaining(request):
+    data = json.loads(request.body.decode("utf-8"))
+
+    temp_log = data['temp_log_id']
+
+    temperatures = models.Temp.objects.filter(temp_log=temp_log).order_by('created')
+
+    print(temperatures)
+
+    return HttpResponse(temperatures, content_type="application/json", status=200)
+
+    # test = numpy.polyfit([10,20,30,40,50,60,70,80,90], [.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5], 2)
+
+    # print("testes", test)
+
+    # woot = numpy.polyval(test, 100)
+
+    # print("woots", woot)
