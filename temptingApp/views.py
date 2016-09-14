@@ -1,14 +1,18 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from django.utils import timezone
+
 from rest_framework import viewsets, permissions
-from .models import Team, TempLog, Temp
-from .serializers import TeamSerializer, TempLogSerializer, TempSerializer, UserSerializer
+
 from yocto_api import *
 from yocto_temperature import *
-from . import models
+
 import threading, json, numpy, datetime
-from django.utils import timezone
+
+from .models import Team, TempLog, Temp
+from .serializers import TeamSerializer, TempLogSerializer, TempSerializer, UserSerializer
+from . import models
 
 
 # global threading event
@@ -65,12 +69,11 @@ def start_logging_temps(request):
     if not(sensor.isOnline()):
         return HttpResponse(status=400)
 
-    # retreive sensor serial
+    # retreive sensor serial number (in case the thermometer's logical name was passed in)
     serial = sensor.get_module().get_serialNumber()
 
     # retreive thermometer channel
     channel1 = YTemperature.FindTemperature(serial + '.temperature1')
-    print(channel1.get_currentValue())
 
     # if the current thermometer is already logging data, send a 400 status
     if thermometer in [thread.name for thread in threading.enumerate()]:

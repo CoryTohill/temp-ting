@@ -1,7 +1,9 @@
-from rest_framework import routers
-from django.conf.urls import url, include
-from temptingApp import views
 from django.views.decorators.csrf import csrf_exempt
+from django.conf.urls import url, include
+
+from rest_framework import routers
+
+from temptingApp import views
 
 
 router = routers.DefaultRouter()

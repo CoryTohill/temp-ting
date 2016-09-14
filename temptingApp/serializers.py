@@ -1,6 +1,8 @@
-from rest_framework import serializers
-from temptingApp.models import Team, TempLog, Temp
 from django.contrib.auth.models import User
+
+from rest_framework import serializers
+
+from temptingApp.models import Team, TempLog, Temp
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
