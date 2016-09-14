@@ -48,8 +48,6 @@ def start_logging_temps(request):
     description = data["description"]
     team_id = data["team_id"]
 
-    team = models.Team.objects.filter(id=team_id)[0]
-    temp_log = models.TempLog.objects.create(description=description, team=team)
 
     # Yocto api error message
     errmsg = YRefParam()
@@ -78,6 +76,10 @@ def start_logging_temps(request):
     # if the current thermometer is already logging data, send a 400 status
     if thermometer in [thread.name for thread in threading.enumerate()]:
         return HttpResponse(status=400)
+
+    # create a new TempLog
+    team = models.Team.objects.filter(id=team_id)[0]
+    temp_log = models.TempLog.objects.create(description=description, team=team)
 
     # target method to start a logging thread
     def start_log(e):
