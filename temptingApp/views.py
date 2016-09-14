@@ -48,7 +48,6 @@ def start_logging_temps(request):
     description = data["description"]
     team_id = data["team_id"]
 
-
     # Yocto api error message
     errmsg = YRefParam()
 
