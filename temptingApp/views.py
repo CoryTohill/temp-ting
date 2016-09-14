@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
+from django.http import HttpResponse
 from rest_framework import viewsets, permissions
 from .models import Team, TempLog, Temp
 from .serializers import TeamSerializer, TempLogSerializer, TempSerializer, UserSerializer
@@ -13,6 +13,9 @@ import threading, json, numpy
 # global threading event
 e = threading.Event()
 e.clear()
+
+# time interval for logging temperatures
+log_interval = 5
 
 
 class Team(viewsets.ModelViewSet):
@@ -81,7 +84,7 @@ def start_logging_temps(request):
             current_temp = round(channel1.get_currentValue())
             models.Temp.objects.create(value=current_temp, temp_log=temp_log)
             print(current_temp)
-            e.wait(2)
+            e.wait(log_interval)
 
     thread = threading.Thread(name=thermometer, target=start_log, args=(e,))
     thread.start()
@@ -112,21 +115,25 @@ def user_logout(request):
     return HttpResponse(status=200)
 
 
-def time_remaining(request):
+def calculate_cook_time(request):
     data = json.loads(request.body.decode("utf-8"))
 
     temp_log = data['temp_log_id']
+    target_temp = int(data['target_temp'])
 
-    temperatures = models.Temp.objects.filter(temp_log=temp_log).order_by('created')
+    temp_query_set = models.Temp.objects.filter(temp_log=temp_log).order_by('created')
+    temperatures = [temp.value for temp in temp_query_set]
+    time_intervals = [t for t in range(len(temperatures))]
 
-    print(temperatures)
+    # gets the values of a polynomial equation that fits the temperature data points
+    poly_equation = numpy.polyfit(temperatures, time_intervals, 1)
 
-    return HttpResponse(temperatures, content_type="application/json", status=200)
+    # plugs in the target_temp to the polynomial equation to determine cook time
+    estimated_cook_time = numpy.polyval(poly_equation, target_temp) * log_interval
 
-    # test = numpy.polyfit([10,20,30,40,50,60,70,80,90], [.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5], 2)
+    return HttpResponse(estimated_cook_time, content_type="application/json", status=200)
 
-    # print("testes", test)
 
-    # woot = numpy.polyval(test, 100)
 
-    # print("woots", woot)
+
+
