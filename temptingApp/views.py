@@ -1,9 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.http import HttpResponse
 from django.utils import timezone
 
 from rest_framework import viewsets, permissions
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from yocto_api import *
 from yocto_temperature import *
@@ -46,6 +47,7 @@ class User(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
+@api_view(['GET', 'POST'])
 def start_logging_temps(request):
     data = json.loads(request.body.decode("utf-8"))
     thermometer = data["thermometer"]
@@ -57,17 +59,17 @@ def start_logging_temps(request):
 
     # Setup the API to use local USB devices
     if YAPI.RegisterHub("usb", errmsg)!= YAPI.SUCCESS:
-        return HttpResponse(status=400)
+        return Response(status=400)
 
     # retreive any temperature sensor and check that it is online
     sensor = YTemperature.FirstTemperature()
 
     if sensor is None :
-        return HttpResponse(status=400)
+        return Response(status=400)
     else:
         sensor = YTemperature.FindTemperature(thermometer + '.temperature1')
     if not(sensor.isOnline()):
-        return HttpResponse(status=400)
+        return Response(status=400)
 
     # retreive sensor serial number (in case the thermometer's logical name was passed in)
     serial = sensor.get_module().get_serialNumber()
@@ -77,7 +79,7 @@ def start_logging_temps(request):
 
     # if the current thermometer is already logging data, send a 400 status
     if thermometer in [thread.name for thread in threading.enumerate()]:
-        return HttpResponse(status=400)
+        return Response(status=400)
 
     # create a new TempLog
     team = models.Team.objects.filter(id=team_id)[0]
@@ -95,9 +97,10 @@ def start_logging_temps(request):
     thread = threading.Thread(name=thermometer, target=start_log, args=(e,))
     thread.start()
 
-    return HttpResponse(status=200)
+    return Response(status=200)
 
 
+@api_view(['POST'])
 def stop_logging_temps(request):
     data = json.loads(request.body.decode("utf-8"))
     temp_log_id = data['temp_log_id']
@@ -111,9 +114,10 @@ def stop_logging_temps(request):
     # stop threading event by setting it
     e.set()
 
-    return HttpResponse(updated_temp_log, content_type="application/json", status=200)
+    return Response(updated_temp_log, content_type="application/json", status=200)
 
 
+@api_view(['POST'])
 def user_login(request):
     data = json.loads(request.body.decode("utf-8"))
     username = data['username']
@@ -121,17 +125,19 @@ def user_login(request):
     user = authenticate(username=username, password=password)
     if user is not None:
         login(request, user)
-        return HttpResponse(user, content_type="application/json", status=200)
+        return Response(user, content_type="application/json", status=200)
 
     else:
-        return HttpResponse(status=400)
+        return Response(status=400)
 
 
+@api_view(['POST'])
 def user_logout(request):
     logout(request)
-    return HttpResponse(status=200)
+    return Response(status=200)
 
 
+@api_view(['POST'])
 def calculate_cook_time(request):
     data = json.loads(request.body.decode("utf-8"))
 
@@ -148,4 +154,4 @@ def calculate_cook_time(request):
     # plugs in the target_temp to the polynomial equation to determine cook time
     estimated_cook_time = numpy.polyval(poly_equation, target_temp) * log_interval
 
-    return HttpResponse(estimated_cook_time, content_type="application/json", status=200)
+    return Response(estimated_cook_time, content_type="application/json", status=200)
