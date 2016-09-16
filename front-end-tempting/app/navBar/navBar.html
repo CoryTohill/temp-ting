@@ -1,0 +1,21 @@
+<div ng-controller="NavBarCtrl as navBar">
+  <div class="navbar navbar-inverse">
+    <div class="container-fluid">
+
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#/">Temp-ting</a>
+      </div>
+
+      <ul class="nav navbar-nav">
+        <li ng-class="{ active: navBar.isActive('/')}"><a href="#/">Home</a></li>
+        <li ng-class="{ active: navBar.isActive('/group')}"><a href="#/group" ng-show="navBar.loggedIn">My Groups</a></li>
+        <li ng-class="{ active: navBar.isActive('/tempLog')}"><a href="#/tempLog" ng-show="navBar.loggedIn">My Logs</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li ng-class="{ active: isActive('/login')}"><a href="#/login" ng-show="!navBar.loggedIn">Login</a></li>
+        <li><a ng-click="navBar.logout()" ng-show="navBar.loggedIn">Logout</a></li>
+      </ul>
+
+    </div>
+  </div>
+</div>
