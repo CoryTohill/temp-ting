@@ -1,5 +1,5 @@
 app
-    .constant('apiUrl', "http://localhost:8000/")
+    .constant('apiUrl', "http://127.0.0.1:8000/")
 
     .factory('RootFactory', ($http, $timeout, apiUrl) => {
         let apiRoot = null;

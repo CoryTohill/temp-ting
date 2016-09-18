@@ -1,6 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view
@@ -116,7 +118,7 @@ def stop_logging_temps(request):
 
     return Response(updated_temp_log, content_type="application/json", status=200)
 
-
+@csrf_exempt
 @api_view(['POST'])
 def user_login(request):
     data = json.loads(request.body.decode("utf-8"))
@@ -125,7 +127,8 @@ def user_login(request):
     user = authenticate(username=username, password=password)
     if user is not None:
         login(request, user)
-        return Response(user, content_type="application/json", status=200)
+
+        return Response(data=user.id)
 
     else:
         return Response(status=400)
@@ -134,7 +137,7 @@ def user_login(request):
 @api_view(['POST'])
 def user_logout(request):
     logout(request)
-    return Response(status=200)
+    return Response("success")
 
 
 @api_view(['POST'])

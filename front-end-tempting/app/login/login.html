@@ -1,1 +1,14 @@
-<h1>Login Page</h1>
+<h1>Login</h1>
+<form ng-submit="login.login()">
+    <input type="text"
+           ng-model="login.user.username"
+           placeholder="Username"
+           class="form-control">
+    <input type="password"
+           ng-model="login.user.password"
+           placeholder="Password"
+           class="form-control">
+    <input type="submit"
+           value="Login"
+           class="btn btn-primary auth-btn">
+</form>
