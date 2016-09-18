@@ -128,7 +128,7 @@ def user_login(request):
     if user is not None:
         login(request, user)
 
-        return Response(data=user.id)
+        return Response("success")
 
     else:
         return Response(status=400)
