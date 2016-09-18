@@ -1,7 +1,7 @@
 app
 
     .factory('AuthFactory', ($timeout, $location, apiUrl, $http) => {
-        let currentUser = null;
+        let loggedIn = false;
 
         return {
             login (username, password) {
@@ -11,6 +11,14 @@ app
                                   {headers:{"Content-Type": "application/json"}}
                         );
             },
+            isUserLoggedIn (boolean) {
+                if (typeof boolean !== "undefined") {
+                    loggedIn = boolean;
+                    console.log("FIRED", loggedIn)
+                } else {
+                    return loggedIn;
+                }
+            }
 
     //   logout () {
     //    return $timeout().then(() => (

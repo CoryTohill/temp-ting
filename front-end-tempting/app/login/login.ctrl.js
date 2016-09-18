@@ -11,8 +11,11 @@ app
                             {"username": login.username,
                              "password": login.password}
                         );
+                        // sets loggedIn variable to true for navBar purposes
+                        AuthFactory.isUserLoggedIn(true);
+                        // redirects to homepage
+                        $location.path('/');
                     }
-                    $location.path('/');
                 })
                 .catch(() => alert("Incorrect username/password. Please try again."));
         };
