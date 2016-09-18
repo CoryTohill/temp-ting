@@ -7,8 +7,18 @@ app
                 `${apiUrl}login/`,
                 {"username": login.username,
                  "password": login.password},
-                {headers:{"Content-Type": "application/json"}})
-                .then(res => console.log("success", res.data))
-                .catch(() => alert("Incorrect username/password. Please try again."));
+                {headers:{"Content-Type": "application/json"}}
+            )
+            .then(res => {
+                if (res.data.success) {
+                    // save the username and password under credentials if login is successful
+                    RootFactory.credentials(
+                        {"username": login.username,
+                         "password": login.password}
+                    );
+                }
+                $location.path('/tickets/new');
+            })
+            .catch(() => alert("Incorrect username/password. Please try again."));
         };
     });
