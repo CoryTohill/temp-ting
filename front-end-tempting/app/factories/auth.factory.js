@@ -1,14 +1,16 @@
 app
 
-  .factory('AuthFactory', ($timeout, $location, apiUrl) => {
-    let currentUser = null;
+    .factory('AuthFactory', ($timeout, $location, apiUrl, $http) => {
+        let currentUser = null;
 
-    // return {
-    //   login (username, password) {
-    //     return $timeout().then(() => (
-    //       firebase.auth().signInWithEmailAndPassword(email, password)
-    //     )).then((loginResponse) => currentUser = loginResponse.uid);
-    //   },
+        return {
+            login (username, password) {
+                return $http.post(`${apiUrl}login/`,
+                                  {"username": username,
+                                  "password": password},
+                                  {headers:{"Content-Type": "application/json"}}
+                        );
+            },
 
     //   logout () {
     //    return $timeout().then(() => (
@@ -31,5 +33,5 @@ app
     //   getUser () {
     //     return currentUser;
     //   }
-    // };
+    };
   });
