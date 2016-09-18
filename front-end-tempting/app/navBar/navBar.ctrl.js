@@ -16,4 +16,10 @@ app
             return viewLocation === $location.path();
         };
 
+        navBar.logout = function () {
+            AuthFactory.isUserLoggedIn(false);
+            RootFactory.credentials({});
+            $location.path("/");
+        };
+
     });

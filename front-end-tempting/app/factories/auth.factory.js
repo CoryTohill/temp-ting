@@ -14,7 +14,6 @@ app
             isUserLoggedIn (boolean) {
                 if (typeof boolean !== "undefined") {
                     loggedIn = boolean;
-                    console.log("FIRED", loggedIn)
                 } else {
                     return loggedIn;
                 }

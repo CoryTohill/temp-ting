@@ -135,12 +135,6 @@ def user_login(request):
 
 
 @api_view(['POST'])
-def user_logout(request):
-    logout(request)
-    return Response("success")
-
-
-@api_view(['POST'])
 def calculate_cook_time(request):
     data = json.loads(request.body.decode("utf-8"))
 
