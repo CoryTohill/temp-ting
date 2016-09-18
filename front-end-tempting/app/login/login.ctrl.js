@@ -5,7 +5,8 @@ app
         login.login = function () {
             $http.post(
                 `${apiUrl}login/`,
-                login.user,
+                {"username": login.username,
+                 "password": login.password},
                 {headers:{"Content-Type": "application/json"}})
                 .then(res => console.log("success", res.data))
                 .catch(() => alert("Incorrect username/password. Please try again."));
