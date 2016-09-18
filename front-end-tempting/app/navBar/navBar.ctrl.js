@@ -12,11 +12,11 @@ app
             }
         );
 
-        navBar.isActive = function (viewLocation) {
+        navBar.isActive = (viewLocation) => {
             return viewLocation === $location.path();
         };
 
-        navBar.logout = function () {
+        navBar.logout = () => {
             AuthFactory.isUserLoggedIn(false);
             RootFactory.credentials({});
             $cookies.remove('temptingCredentials');
