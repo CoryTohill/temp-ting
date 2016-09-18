@@ -1,6 +1,6 @@
 app
 
-    .controller('NavBarCtrl', function ($location, RootFactory, AuthFactory, $scope) {
+    .controller('NavBarCtrl', function ($location, RootFactory, AuthFactory, $scope, $cookies) {
         const navBar = this;
 
         navBar.loggedIn = AuthFactory.isUserLoggedIn();
@@ -19,6 +19,7 @@ app
         navBar.logout = function () {
             AuthFactory.isUserLoggedIn(false);
             RootFactory.credentials({});
+            $cookies.remove('temptingCredentials');
             $location.path("/");
         };
 
