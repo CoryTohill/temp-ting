@@ -27,5 +27,6 @@ app
 
         login.register = () => {
             AuthFactory.register(login.username, login.password)
+                .then(() => login.login(login.username, login.password))
         };
     });
