@@ -11,9 +11,9 @@ app.config(($routeProvider) => (
         templateUrl: "app/graph/graph.html"
       })
       .when("/group", {
-        controller: "GroupCtrl",
-        controllerAs: "group",
-        templateUrl: "app/group/group.html"
+        controller: "TeamCtrl",
+        controllerAs: "team",
+        templateUrl: "app/team/team.html"
       })
       .when("/login", {
         controller: "LoginCtrl",
