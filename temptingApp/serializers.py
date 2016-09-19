@@ -13,7 +13,7 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    teams = TeamSerializer(many=True, read_only=True)
+    # teams = TeamSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
