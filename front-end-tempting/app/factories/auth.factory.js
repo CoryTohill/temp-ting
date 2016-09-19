@@ -32,7 +32,8 @@ app
                 return RootFactory.getApiRoot()
                     .then(root => $http.post(`${root.users}`,
                         {"username": username,
-                         "password": password},
+                         "password": password,
+                         "teams":[]},
                         {headers:{"Content-Type": "application/json"}}
                     ));
             }
