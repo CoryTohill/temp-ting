@@ -13,11 +13,21 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    teams = TeamSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
-        fields = ('id', 'url', 'username', 'teams')
+        fields = ('id', 'url', 'username', 'password', 'teams')
+        write_only_fields = ('password',)
+        read_only_fields = ('id',)
+
+    def create(self, validated_data):
+        user = User.objects.create(
+            username=validated_data['username'],
+        )
+
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
 
 
 class TempLogSerializer(serializers.HyperlinkedModelSerializer):
