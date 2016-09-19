@@ -1,7 +1,7 @@
 app
     .constant('apiUrl', "http://localhost:8000/")
 
-    .factory('RootFactory', ($http, $timeout, apiUrl) => {
+    .factory('RootFactory', ($http, apiUrl, $cookies) => {
         let apiRoot = null;
         let httpGet = $http.get(apiUrl);
         let userCredentials = {};

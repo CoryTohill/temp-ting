@@ -12,7 +12,7 @@
         <li ng-class="{ active: navBar.isActive('/tempLog')}"><a href="#/tempLog" ng-show="navBar.loggedIn">My Logs</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li ng-class="{ active: isActive('/login')}"><a href="#/login" ng-show="!navBar.loggedIn">Login</a></li>
+        <li ng-class="{ active: navBar.isActive('/login')}"><a href="#/login" ng-show="!navBar.loggedIn">Login / Register</a></li>
         <li><a ng-click="navBar.logout()" ng-show="navBar.loggedIn">Logout</a></li>
       </ul>
 

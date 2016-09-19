@@ -1,35 +1,40 @@
 app
 
-  .factory('AuthFactory', ($timeout, $location, apiUrl) => {
-    let currentUser = null;
+    .factory('AuthFactory', ($location, apiUrl, $http, RootFactory, $cookies) => {
+        let loggedIn = false;
+        let cookieCreds = $cookies.get('temptingCredentials');
 
-    // return {
-    //   login (username, password) {
-    //     return $timeout().then(() => (
-    //       firebase.auth().signInWithEmailAndPassword(email, password)
-    //     )).then((loginResponse) => currentUser = loginResponse.uid);
-    //   },
+        // prevents page reloading from logging users out by setting
+        // user credentials and loggedIn variable if local cookie credentials exist
+        if (cookieCreds) {
+            RootFactory.credentials(cookieCreds);
+            loggedIn = true;
+        }
 
-    //   logout () {
-    //    return $timeout().then(() => (
-    //       firebase.auth().signOut().then(function() {
-    //         // Sign-out successful.
-    //         currentUser = null;
-    //       }, function(error) {
-    //         // An error happened.
-    //         alert('Error Logging Out');
-    //       })
-    //     ));
-    //   },
+        return {
+            login (username, password) {
+                return $http.post(`${apiUrl}login/`,
+                                  {"username": username,
+                                  "password": password},
+                                  {headers:{"Content-Type": "application/json"}}
+                        );
+            },
 
-    //   register (email, password) {
-    //     return $timeout().then(() => (
-    //       firebase.auth().createUserWithEmailAndPassword(email, password)
-    //     ));
-    //   },
+            isUserLoggedIn (boolean) {
+                if (typeof boolean !== "undefined") {
+                    loggedIn = boolean;
+                } else {
+                    return loggedIn;
+                }
+            },
 
-    //   getUser () {
-    //     return currentUser;
-    //   }
-    // };
-  });
+            register (username, password) {
+                return RootFactory.getApiRoot()
+                    .then(root => $http.post(`${root.users}`,
+                        {"username": username,
+                         "password": password},
+                        {headers:{"Content-Type": "application/json"}}
+                    ));
+            }
+        };
+    });

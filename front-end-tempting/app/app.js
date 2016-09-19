@@ -1,5 +1,5 @@
 var app = angular
-    .module("Temp-ting", ["ngRoute", "ui.bootstrap"])
+    .module("Temp-ting", ["ngRoute", "ui.bootstrap", "ngCookies"])
 
     .config(function($interpolateProvider, $httpProvider) {
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
