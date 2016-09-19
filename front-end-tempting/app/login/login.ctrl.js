@@ -26,6 +26,6 @@ app
         };
 
         login.register = () => {
-
+            AuthFactory.register(login.username, login.password)
         };
     });

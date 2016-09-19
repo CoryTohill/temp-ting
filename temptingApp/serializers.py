@@ -5,18 +5,19 @@ from rest_framework import serializers
 from temptingApp.models import Team, TempLog, Temp
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ('id', 'url', 'username', 'teams')
-
-
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Team
         fields = ('id', 'url', 'name', 'description', 'users')
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    teams = TeamSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'url', 'username', 'teams')
 
 
 class TempLogSerializer(serializers.HyperlinkedModelSerializer):
@@ -27,7 +28,7 @@ class TempLogSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TempSerializer(serializers.HyperlinkedModelSerializer):
-    # tracks = TrackSerializer(many=True, read_only=True)
+
     class Meta:
         model = Temp
         fields = ('id', 'url', 'value', 'created', 'temp_log')
