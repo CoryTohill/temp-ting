@@ -16,7 +16,7 @@ app
                         AuthFactory.isUserLoggedIn(true);
 
                         // stores the credentials as a cookie
-                        $cookies.put('temptingCredentials', creds);
+                        $cookies.putObject('temptingCredentials', creds);
 
                         // redirects to homepage
                         $location.path('/');
@@ -27,6 +27,6 @@ app
 
         login.register = () => {
             AuthFactory.register(login.username, login.password)
-                .then(() => login.login(login.username, login.password))
+                .then(() => login.login(login.username, login.password));
         };
     });
