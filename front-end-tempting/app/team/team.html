@@ -1,1 +1,15 @@
 <h1>Group/team Page</h1>
+
+<h1>My Groups:</h1>
+<div ng-repeat="group in team.allTeams | filter: team.currentUser">
+    <h4>(( group.name ))</h4>
+    <p>(( group.description ))</p>
+    <button class="btn btn-xs pull-right" ng-click="team.removeTeam(group)">Leave Group</button>
+</div>
+
+<h1>Groups to Add:</h1>
+<div ng-repeat="group in team.allTeams | filter: '!' + team.currentUser">
+    <h4>(( group.name ))</h4>
+    <p>(( group.description ))</p>
+    <button class="btn btn-xs pull-right" ng-click="team.addTeam(group)">Join Group</button>
+</div>

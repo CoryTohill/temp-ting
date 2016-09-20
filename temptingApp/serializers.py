@@ -5,11 +5,6 @@ from rest_framework import serializers
 from temptingApp.models import Team, TempLog, Temp
 
 
-class TeamSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-        model = Team
-        fields = ('id', 'url', 'name', 'description', 'users')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -28,6 +23,14 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+
+class TeamSerializer(serializers.HyperlinkedModelSerializer):
+    # users = UserSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Team
+        fields = ('id', 'url', 'name', 'description', 'users')
 
 
 class TempLogSerializer(serializers.HyperlinkedModelSerializer):
