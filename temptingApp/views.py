@@ -34,17 +34,19 @@ class Team(viewsets.ModelViewSet):
 
 class TempLog(viewsets.ModelViewSet):
     queryset = TempLog.objects.all()
-    model = models.TempLog
+    # model = models.TempLog
     serializer_class = TempLogSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def get_queryset(self):
         user = self.request.user
-        teams = models.Team.objects.filter(users=user)
-        logs = models.TempLog.objects.filter(team=teams)
 
-        return logs
-
+        if user.is_anonymous():
+            return models.TempLog.objects.all()
+        else:
+            teams = models.Team.objects.filter(users=user)
+            logs = models.TempLog.objects.filter(team__in=teams)
+            return logs
 
 
 class Temp(viewsets.ModelViewSet):

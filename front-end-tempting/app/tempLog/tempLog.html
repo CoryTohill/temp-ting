@@ -1,1 +1,8 @@
 <h1>TempLog Page</h1>
+
+<div ng-repeat="(team, logs) in tempLog.logs">
+    <h2>(( team ))</h2>
+    <div ng-repeat="log in logs">
+        <p>((log.description))</p>
+    </div>
+</div>
