@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import viewsets, permissions
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, list_route
 from rest_framework.response import Response
 
 from yocto_api import *
@@ -34,8 +34,17 @@ class Team(viewsets.ModelViewSet):
 
 class TempLog(viewsets.ModelViewSet):
     queryset = TempLog.objects.all()
+    model = models.TempLog
     serializer_class = TempLogSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def get_queryset(self):
+        user = self.request.user
+        teams = models.Team.objects.filter(users=user)
+        logs = models.TempLog.objects.filter(team=teams)
+
+        return logs
+
 
 
 class Temp(viewsets.ModelViewSet):
@@ -47,6 +56,17 @@ class Temp(viewsets.ModelViewSet):
 class User(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        print("********** USER *************", user.is_anonymous())
+
+        if user.is_anonymous():
+            return models.User.objects.all()
+        else:
+            return models.User.objects.filter(username=user)
+
+
 
 
 @api_view(['GET', 'POST'])
