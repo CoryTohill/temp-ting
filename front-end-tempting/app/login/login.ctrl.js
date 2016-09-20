@@ -5,29 +5,34 @@ app
         login.login = () => {
             AuthFactory.login(login.username, login.password)
                 .then(res => {
+                    // save the username and password under credentials if login is successful
+                    RootFactory.credentials({"username": login.username,
+                                             "password": login.password});
+                    // set the new Authorization credentials
+                    $http.defaults.headers.common.Authorization = 'Basic ' + RootFactory.credentials();
+
+                    // sets loggedIn variable to true for navBar purposes
+                    AuthFactory.isUserLoggedIn(true);
+
                     RootFactory.getApiRoot()
-                    // get the logged in user's detail view to save in a cookie
-                    .then(root => $http.get(`${root.users}${res.data}`))
-                    .then(userRes => {
-                        creds = {"username": login.username,
-                                 "password": login.password,
-                                 "url": userRes.data.url};
+                        .then(root => {
+                            // get the logged in user's backend info
+                            $http.get(`${root.users}`)
+                                .then(userRes => {
+                                    userInfo = {"username": login.username,
+                                             "password": login.password,
+                                             "url": userRes.data[0].url};
 
-                        // save the username and password under credentials if login is successful
-                        RootFactory.credentials(creds);
+                                    // set current user to the backend url
+                                    AuthFactory.currentUser(userRes.data[0].url);
 
-                        AuthFactory.currentUser(userRes.data.url);
+                                    // stores the credentials as a cookie
+                                    $cookies.putObject('temptingCredentials', userInfo);
 
-                        // sets loggedIn variable to true for navBar purposes
-                        AuthFactory.isUserLoggedIn(true);
-
-                        // stores the credentials as a cookie
-                        $cookies.putObject('temptingCredentials', creds);
-
-                        // redirects to homepage
-                        $location.path('/');
-                    });
+                                });
+                        });
                 })
+                .then(() => $location.path('/'))
                 .catch(() => alert("Incorrect username/password. Please try again."));
         };
 

@@ -58,8 +58,10 @@ class User(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
     def get_queryset(self):
+        """ If user authentication is sent, return only that user's info,
+        otherwise, return the full list of users.
+        """
         user = self.request.user
-        print("********** USER *************", user.is_anonymous())
 
         if user.is_anonymous():
             return models.User.objects.all()
