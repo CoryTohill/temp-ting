@@ -8,15 +8,15 @@ app
         // prevents page reloading from logging users out by setting currentUser,
         // user credentials, and loggedIn variable if local cookie credentials exist
         if (cookieCreds) {
-            currentUser = cookieCreds.username;
+            currentUser = cookieCreds.url;
             RootFactory.credentials(cookieCreds);
             loggedIn = true;
         }
 
         return {
-            currentUser (username) {
-                if (username) {
-                    currentUser = username;
+            currentUser (user) {
+                if (user) {
+                    currentUser = user;
                 } else {
                     return currentUser;
                 }
