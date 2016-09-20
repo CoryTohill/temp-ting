@@ -26,7 +26,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
-    users = UserSerializer(many=True, read_only=True)
+    # users = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Team

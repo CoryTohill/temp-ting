@@ -16,6 +16,8 @@ app
                         // save the username and password under credentials if login is successful
                         RootFactory.credentials(creds);
 
+                        AuthFactory.currentUser(userRes.data.url);
+
                         // sets loggedIn variable to true for navBar purposes
                         AuthFactory.isUserLoggedIn(true);
 
