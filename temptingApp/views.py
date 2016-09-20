@@ -133,9 +133,9 @@ def stop_logging_temps(request):
 
     current_temp_log = models.TempLog.objects.filter(id=temp_log_id)[0]
 
-    total_cook_time = timezone.now() - current_temp_log.start_date
+    end_date = timezone.now()
 
-    updated_temp_log = models.TempLog.objects.filter(id=temp_log_id).update(total_cook_time=total_cook_time)
+    updated_temp_log = models.TempLog.objects.filter(id=temp_log_id).update(end_date=end_date)
 
     # stop threading event by setting it
     e.set()

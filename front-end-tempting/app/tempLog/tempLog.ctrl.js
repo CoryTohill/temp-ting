@@ -9,8 +9,17 @@ app
             .then(root => {
                 $http.get(`${root.templogs}`)
                     .then(res => {
-                        // organize the log data by team
+                        // organize the log data by team and calculate total cook time if available
                         res.data.forEach((log) => {
+                            // calculate total cook hours and minutes
+                            if (log.end_date) {
+                                let startTimestamp = new Date(log.start_date).getTime();
+                                let endTimestamp = new Date(log.end_date).getTime();
+                                let totalTime = (endTimestamp - startTimestamp);
+
+                                log.total_hours = Math.floor(totalTime / 3600000);
+                                log.total_minutes = Math.floor((totalTime - (log.total_hours * 3600000)) / 60000);
+                            }
                             if (logsOrganizedByTeam[log.team]) {
                                 logsOrganizedByTeam[log.team].push(log);
                             } else {
