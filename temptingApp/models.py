@@ -14,7 +14,7 @@ class Team(models.Model):
 class TempLog(models.Model):
     description = models.CharField(max_length=200)
     start_date = models.DateTimeField(auto_now_add=True)
-    total_cook_time = models.DurationField(blank=True,null=True)
+    end_date = models.DateTimeField(blank=True,null=True)
     team = models.ForeignKey(Team, related_name='templogs')
 
     def __str__(self):

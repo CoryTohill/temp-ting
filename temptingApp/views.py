@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import viewsets, permissions
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, list_route
 from rest_framework.response import Response
 
 from yocto_api import *
@@ -34,8 +34,19 @@ class Team(viewsets.ModelViewSet):
 
 class TempLog(viewsets.ModelViewSet):
     queryset = TempLog.objects.all()
+    # model = models.TempLog
     serializer_class = TempLogSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_anonymous():
+            return models.TempLog.objects.all()
+        else:
+            teams = models.Team.objects.filter(users=user)
+            logs = models.TempLog.objects.filter(team__in=teams)
+            return logs
 
 
 class Temp(viewsets.ModelViewSet):
@@ -47,6 +58,19 @@ class Temp(viewsets.ModelViewSet):
 class User(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def get_queryset(self):
+        """ If user authentication is sent, return only that user's info,
+        otherwise, return the full list of users.
+        """
+        user = self.request.user
+
+        if user.is_anonymous():
+            return models.User.objects.all()
+        else:
+            return models.User.objects.filter(username=user)
+
+
 
 
 @api_view(['GET', 'POST'])
@@ -109,9 +133,9 @@ def stop_logging_temps(request):
 
     current_temp_log = models.TempLog.objects.filter(id=temp_log_id)[0]
 
-    total_cook_time = timezone.now() - current_temp_log.start_date
+    end_date = timezone.now()
 
-    updated_temp_log = models.TempLog.objects.filter(id=temp_log_id).update(total_cook_time=total_cook_time)
+    updated_temp_log = models.TempLog.objects.filter(id=temp_log_id).update(end_date=end_date)
 
     # stop threading event by setting it
     e.set()

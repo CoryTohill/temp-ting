@@ -1,5 +1,5 @@
 app
-    .controller('TeamCtrl', function ($http, $location, RootFactory, apiUrl, AuthFactory, $cookies) {
+    .controller('TeamCtrl', function ($http, RootFactory, AuthFactory) {
         const team = this;
         team.currentUser = AuthFactory.currentUser();
         $http.defaults.headers.common.Authorization = 'Basic ' + RootFactory.credentials();

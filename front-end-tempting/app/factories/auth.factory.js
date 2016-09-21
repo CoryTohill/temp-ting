@@ -1,5 +1,4 @@
 app
-
     .factory('AuthFactory', ($location, apiUrl, $http, RootFactory, $cookies) => {
         let loggedIn = false;
         let cookieCreds = $cookies.getObject('temptingCredentials');
