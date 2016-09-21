@@ -191,3 +191,13 @@ def get_latest_temp(request):
     temp = models.Temp.objects.filter(temp_log=temp_log_id).order_by('-created')[0]
 
     return HttpResponse(temp)
+
+
+def get_all_temps_by_templog(request):
+    data = json.loads(request.body.decode("utf-8"))
+    temp_log_id = data['temp_log_id']
+
+    # get all temps for a specific temp log
+    temps = [x.value for x in models.Temp.objects.filter(temp_log=temp_log_id)]
+
+    return HttpResponse(temps, content_type="application/json", status=200)

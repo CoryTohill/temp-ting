@@ -5,6 +5,15 @@ app
         graph.currentLog = LoggerFactory.currentLog();
         let timeCounter = 0;
         let fusioncharts = {};
+        let startValue = 0;
+
+        getLatestTemp = () => {
+            return $http.post(`${apiUrl}get_latest_temp/`, {'temp_log_id':graph.currentLog.id});
+        };
+
+
+        getLatestTemp().then(res => startValue = res.data)
+        .then(() => {
 
         // ********* Graph Controls ************
         if (LoggerFactory.chartInitialized() === false) {
@@ -38,8 +47,7 @@ app
                             }],
                             "dataset": [{
                                 "data": [{
-                                    "value": "35.27",
-                                    "value": "100"
+                                    "value": startValue,
                                 }]
                             }]
                         },
@@ -47,9 +55,8 @@ app
                             "initialized": function(e) {
 
                                 function updateData() {
-                                    $http.post(`${apiUrl}get_latest_temp/`, {'temp_log_id':graph.currentLog.id})
+                                    getLatestTemp()
                                     .then(tempRes => {
-
                                         // Get reference to the chart using its ID
                                         var chartRef = FusionCharts("stockRealTimeChart");
                                             // calculate the amount of time to disply per data point
@@ -78,5 +85,5 @@ app
                     });
                     fusioncharts.render();
                 });
-            }
+            }})
     });
