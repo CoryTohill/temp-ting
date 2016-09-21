@@ -38,4 +38,6 @@ app
                         tempLog.logs = logsOrganizedByTeam;
                     });
             });
+
+        tempLog.selectLog = (log) => console.log("LOG", log);
     });

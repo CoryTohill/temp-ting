@@ -2,10 +2,11 @@
 
 <div ng-repeat="(team, logs) in tempLog.logs">
     <h2>(( team ))</h2>
-    <div ng-repeat="log in logs">
-        <h3>((log.description))</h3>
-        <p>Started: ((log.start_date | date:'short'))</p>
-        <p>Total Cook Time: ((log.total_hours))h ((log.total_minutes))m</p>
+    <div ng-repeat="log in logs" ng-click="tempLog.selectLog(log)">
+        <h3>(( log.description ))</h3>
+        <p>Started: (( log.start_date | date:'short' ))</p>
+        <p ng-if="log.end_date">Total Cook Time: (( log.total_hours ))h (( log.total_minutes ))m</p>
+        <p ng-if="log.end_date==none">In Progress</p>
     </div>
 </div>
 
