@@ -1,24 +1,30 @@
 app
-    .controller('GraphCtrl', function ($http, $location, RootFactory, apiUrl, AuthFactory, $cookies) {
+    .controller('GraphCtrl', function ($http, $location, RootFactory, AuthFactory, LoggerFactory, apiUrl) {
+        const graph = this;
+        $http.defaults.headers.common.Authorization = 'Basic ' + RootFactory.credentials();
+        graph.currentLog = LoggerFactory.currentLog();
+        let timeCounter = 0;
+
+        // ********* Graph Controls ************
         FusionCharts.ready(function(){
             var fusioncharts = new FusionCharts({
                 id: "stockRealTimeChart",
                 type: 'realtimeline',
                 renderAt: 'chart-container',
-                width: '500',
+                width: '1000',
                 height: '300',
                 dataFormat: 'json',
                 dataSource: {
                     "chart": {
-                        "caption": "Real-time stock price monitor",
-                        "subCaption": "Harry's SuperMart",
+                        "caption": graph.currentLog.description,
+                        // "subCaption": "",
                         "xAxisName": "Time",
-                        "yAxisName": "Stock Price",
-                        "numberPrefix": "$",
-                        "refreshinterval": "5",
-                        "yaxisminvalue": "35",
-                        "yaxismaxvalue": "36",
-                        "numdisplaysets": "10",
+                        "yAxisName": "Temperature \u00B0F",
+                        // "numberPrefix": "$",
+                        "refreshinterval": "1",
+                        "yaxisminvalue": "0",
+                        "yaxismaxvalue": "200",
+                        "numdisplaysets": "50",
                         "labeldisplay": "rotate",
                         "showValues": "0",
                         "showRealTimeValue": "0",
@@ -26,39 +32,40 @@ app
                     },
                     "categories": [{
                         "category": [{
-                            "label": "Day Start"
+                            "label": "0"
                         }]
                     }],
                     "dataset": [{
                         "data": [{
-                            "value": "35.27"
+                            "value": "35.27",
+                            "value": "100"
                         }]
                     }]
                 },
                 "events": {
                     "initialized": function(e) {
-                        function addLeadingZero(num) {
-                            return (num <= 9) ? ("0" + num) : num;
-                        }
 
                         function updateData() {
-                            // Get reference to the chart using its ID
-                            var chartRef = FusionCharts("stockRealTimeChart"),
-                                // We need to create a querystring format incremental update, containing
-                                // label in hh:mm:ss format
-                                // and a value (random).
-                                currDate = new Date(),
-                                label = addLeadingZero(currDate.getHours()) + ":" +
-                                addLeadingZero(currDate.getMinutes()) + ":" +
-                                addLeadingZero(currDate.getSeconds()),
-                                // Get random number between 35.25 & 35.75 - rounded to 2 decimal places
-                                randomValue = Math.floor(Math.random() * 50) / 100 + 35.25,
-                                // Build Data String in format &label=...&value=...
-                                strData = "&label=" + label + "&value=" + randomValue;
-                            // Feed it to chart.
-                            chartRef.feedData(strData);
-                        }
+                            $http.post(`${apiUrl}get_latest_temp/`, {'temp_log_id':graph.currentLog.id})
+                            .then(tempRes => {
 
+                                // Get reference to the chart using its ID
+                                var chartRef = FusionCharts("stockRealTimeChart");
+                                    // calculate the amount of time to disply per data point
+                                    timeCounter += 5;
+                                    hours = Math.floor(timeCounter/3600);
+                                    minutes = Math.floor((timeCounter - hours*3600)/60);
+                                    seconds = Math.floor(timeCounter - (hours*3600 + minutes*60));
+
+                                    label = `${hours}h ${minutes}m ${seconds}s`;
+
+                                    // Build Data String in format &label=...&value=...
+                                    strData = "&label=" + label + "&value=" + tempRes.data;
+                                // Feed it to chart.
+                                chartRef.feedData(strData);
+                            });
+                        }
+                        // amount of time to wait before refiring updateData function
                         e.sender.chartInterval = setInterval(function() {
                             updateData();
                         }, 5000);

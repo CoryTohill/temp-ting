@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view, list_route
@@ -16,6 +17,9 @@ import threading, json, numpy, datetime
 from .models import Team, TempLog, Temp
 from .serializers import TeamSerializer, TempLogSerializer, TempSerializer, UserSerializer
 from . import models
+
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
 
 
 # global threading event
@@ -123,7 +127,7 @@ def start_logging_temps(request):
     thread = threading.Thread(name=thermometer, target=start_log, args=(e,))
     thread.start()
 
-    return Response(status=200)
+    return Response(temp_log)
 
 
 @api_view(['POST'])
@@ -141,6 +145,7 @@ def stop_logging_temps(request):
     e.set()
 
     return Response(updated_temp_log, content_type="application/json", status=200)
+
 
 @csrf_exempt
 @api_view(['POST'])
@@ -176,3 +181,13 @@ def calculate_cook_time(request):
     estimated_cook_time = numpy.polyval(poly_equation, target_temp) * log_interval
 
     return Response(estimated_cook_time, content_type="application/json", status=200)
+
+
+def get_latest_temp(request):
+    data = json.loads(request.body.decode("utf-8"))
+    temp_log_id = data['temp_log_id']
+
+    # get the latest temperature value for a given temperature log
+    temp = models.Temp.objects.filter(temp_log=temp_log_id).order_by('-created')[0]
+
+    return HttpResponse(temp)
