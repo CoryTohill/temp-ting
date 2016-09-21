@@ -1,5 +1,5 @@
 app
-    .controller('TempLogCtrl', function ($http, $location, RootFactory, apiUrl, AuthFactory, $cookies) {
+    .controller('TempLogCtrl', function ($http, $location, RootFactory, AuthFactory, LoggerFactory) {
         const tempLog = this;
         let logsOrganizedByTeam = {};
         tempLog.currentUser = AuthFactory.currentUser();
@@ -39,5 +39,8 @@ app
                     });
             });
 
-        tempLog.selectLog = (log) => console.log("LOG", log);
+        tempLog.selectLog = (log) => {
+            LoggerFactory.currentLog(log);
+            $location.path('/graph');
+        };
     });
