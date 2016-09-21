@@ -45,4 +45,8 @@ app
                 $location.path('/graph');
             }
         };
+
+        tempLog.newLog = () => {
+            $location.path('/createLog')
+        }
     });

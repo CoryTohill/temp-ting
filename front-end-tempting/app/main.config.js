@@ -25,5 +25,10 @@ app.config(($routeProvider) => (
         controllerAs: "tempLog",
         templateUrl: "app/tempLog/tempLog.html"
       })
+      .when("/createLog", {
+        controller: "CreateLogCtrl",
+        controllerAs: "createLog",
+        templateUrl: "app/createLog/createLog.html"
+      })
       .otherwise("/")
   ));
