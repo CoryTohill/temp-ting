@@ -127,7 +127,7 @@ def start_logging_temps(request):
     thread = threading.Thread(name=thermometer, target=start_log, args=(e,))
     thread.start()
 
-    return Response(temp_log)
+    return HttpResponse(temp_log.id)
 
 
 @api_view(['POST'])
