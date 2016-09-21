@@ -12,78 +12,78 @@ app
         };
 
 
+            // ********* Graph Controls ************
         getLatestTemp().then(res => startValue = res.data)
-        .then(() => {
+            .then(() => {
+                if (LoggerFactory.chartInitialized() === false) {
+                    FusionCharts.ready(function(){
+                            LoggerFactory.chartInitialized(true);
+                            fusioncharts = new FusionCharts({
+                                id: "stockRealTimeChart",
+                                type: 'realtimeline',
+                                renderAt: 'chart-container',
+                                width: '1000',
+                                height: '300',
+                                dataFormat: 'json',
+                                dataSource: {
+                                    "chart": {
+                                        "caption": graph.currentLog.description,
+                                        "xAxisName": "Time",
+                                        "yAxisName": "Temperature \u00B0F",
+                                        "refreshinterval": "1",
+                                        "yaxisminvalue": "0",
+                                        "yaxismaxvalue": "200",
+                                        "numdisplaysets": "50",
+                                        "labeldisplay": "rotate",
+                                        "showValues": "0",
+                                        "showRealTimeValue": "0",
+                                        "theme": "fint"
+                                    },
+                                    "categories": [{
+                                        "category": [{
+                                            "label": "0"
+                                        }]
+                                    }],
+                                    "dataset": [{
+                                        "data": [{
+                                            "value": startValue,
+                                        }]
+                                    }]
+                                },
+                                "events": {
+                                    "initialized": function(e) {
 
-        // ********* Graph Controls ************
-        if (LoggerFactory.chartInitialized() === false) {
-            FusionCharts.ready(function(){
-                    LoggerFactory.chartInitialized(true);
-                    fusioncharts = new FusionCharts({
-                        id: "stockRealTimeChart",
-                        type: 'realtimeline',
-                        renderAt: 'chart-container',
-                        width: '1000',
-                        height: '300',
-                        dataFormat: 'json',
-                        dataSource: {
-                            "chart": {
-                                "caption": graph.currentLog.description,
-                                "xAxisName": "Time",
-                                "yAxisName": "Temperature \u00B0F",
-                                "refreshinterval": "1",
-                                "yaxisminvalue": "0",
-                                "yaxismaxvalue": "200",
-                                "numdisplaysets": "50",
-                                "labeldisplay": "rotate",
-                                "showValues": "0",
-                                "showRealTimeValue": "0",
-                                "theme": "fint"
-                            },
-                            "categories": [{
-                                "category": [{
-                                    "label": "0"
-                                }]
-                            }],
-                            "dataset": [{
-                                "data": [{
-                                    "value": startValue,
-                                }]
-                            }]
-                        },
-                        "events": {
-                            "initialized": function(e) {
+                                        function updateData() {
+                                            getLatestTemp()
+                                            .then(tempRes => {
+                                                // Get reference to the chart using its ID
+                                                var chartRef = FusionCharts("stockRealTimeChart");
+                                                    // calculate the amount of time to disply per data point
+                                                    timeCounter += 5;
+                                                    hours = Math.floor(timeCounter/3600);
+                                                    minutes = Math.floor((timeCounter - hours*3600)/60);
+                                                    seconds = Math.floor(timeCounter - (hours*3600 + minutes*60));
 
-                                function updateData() {
-                                    getLatestTemp()
-                                    .then(tempRes => {
-                                        // Get reference to the chart using its ID
-                                        var chartRef = FusionCharts("stockRealTimeChart");
-                                            // calculate the amount of time to disply per data point
-                                            timeCounter += 5;
-                                            hours = Math.floor(timeCounter/3600);
-                                            minutes = Math.floor((timeCounter - hours*3600)/60);
-                                            seconds = Math.floor(timeCounter - (hours*3600 + minutes*60));
+                                                    label = `${hours}h ${minutes}m ${seconds}s`;
 
-                                            label = `${hours}h ${minutes}m ${seconds}s`;
-
-                                            // Build Data String in format &label=...&value=...
-                                            strData = "&label=" + label + "&value=" + tempRes.data;
-                                        // Feed it to chart.
-                                        chartRef.feedData(strData);
-                                    });
+                                                    // Build Data String in format &label=...&value=...
+                                                    strData = "&label=" + label + "&value=" + tempRes.data;
+                                                // Feed it to chart.
+                                                chartRef.feedData(strData);
+                                            });
+                                        }
+                                        // amount of time to wait before refiring updateData function
+                                        e.sender.chartInterval = setInterval(function() {
+                                            updateData();
+                                        }, 5000);
+                                    },
+                                    "disposed": function(evt, arg) {
+                                        clearInterval(evt.sender.chartInterval);
+                                    }
                                 }
-                                // amount of time to wait before refiring updateData function
-                                e.sender.chartInterval = setInterval(function() {
-                                    updateData();
-                                }, 5000);
-                            },
-                            "disposed": function(evt, arg) {
-                                clearInterval(evt.sender.chartInterval);
-                            }
-                        }
-                    });
-                    fusioncharts.render();
-                });
-            }})
+                            });
+                            fusioncharts.render();
+                        });
+                    }
+            });
     });
