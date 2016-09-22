@@ -34,6 +34,11 @@ app
             return `${hours}h ${minutes}m ${seconds}s`;
         };
 
+        graph.endLog = () => {
+
+            $location.path('/tempLog')
+        };
+
         // ********* Graph Controls ************
         getLatestTemp().then(res => startValue = res.data)
             .then(() => {

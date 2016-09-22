@@ -1,21 +1,33 @@
 <div class="container">
 
-<div class="panel-group">
+    <div class="panel-group">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h2>(( graph.currentLog.description )) - (( graph.currentLog.start_date | date:'short' ))</h2>
             </div>
             <div class="panel-body">
 
-    <div id="chart-container" class="col-xs-12 img-responsive">FusionCharts XT will load here!</div>
+                <div id="chart-container" class="col-xs-12">FusionCharts XT will load here!</div>
 
-    <div class="form-group col-sm-3 col-md-2 col-md-offset-2">
-        <input type="number"
-                ng-model="graph.targetTemp"
-                placeholder="Target Temp"
-                class="form-control">
+                <div class="col-sm-6 text-center">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <label for="target">Target Temp:</label>
+                        <input type="number"
+                                ng-model="graph.targetTemp"
+                                name="target"
+                                class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <label class="" for="estimated">Estimated Time Remaining:</label>
+                    <p class="lead" name="estimated">(( graph.timeRemaining ))</p>
+                </div>
+                <div class="col-xs-12 text-center">
+                    <button ng-click="graph.endLog()"
+                            class="btn btn-lg btn-warning">End Log</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <p class="lead col-sm-9 col-md-8">Estimated Time Remaining: (( graph.timeRemaining ))</p>
-    </div>
+
 </div>
