@@ -1,21 +1,44 @@
-<h1>Create Log</h1>
-<form ng-submit="createLog.create()">
-    <input type="text"
-           ng-model="createLog.description"
-           placeholder="Description"
-           class="form-control">
-    <select name="teamSelect"
-            ng-model="createLog.team"
-            ng-options="team.name for team in createLog.allTeams | filter: createLog.currentUser"
-            class="form-control">
-        <option value="">Select Team</option>}
-    <input type="text"
-           ng-model="createLog.thermometer"
-           placeholder="Thermometer Serial Number"
-           class="form-control">
-    <input type="submit"
-           value="Create Log"
-           class="btn btn-primary auth-btn">
-</form>
+<div class="container-fluid">
 
-<h2>(( createLog.team ))</h2>
+    <div class="panel-group col-sm-8 col-sm-offset-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2>Create New Log</h2>
+            </div>
+            <div class="panel-body">
+
+                <form ng-submit="createLog.create()"
+                      class="col-md-6 col-md-offset-3 createLogForm ">
+                    <div class="form-group">
+                        <select name="teamSelect"
+                                ng-model="createLog.team"
+                                ng-options="team.name for team in createLog.allTeams | filter: createLog.currentUser"
+                                class="form-control">
+                            <option value=""
+                                    disabled
+                                    hidden>Select Team</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text"
+                             ng-model="createLog.description"
+                             placeholder="Description"
+                             class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="text"
+                               ng-model="createLog.thermometer"
+                               placeholder="Thermometer Serial Number"
+                               class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit"
+                               value="Start Logging Temps"
+                               class="btn btn-primary auth-btn">
+                    </div>
+              </form>
+            </div>
+        </div>
+    </div>
+
+</div>

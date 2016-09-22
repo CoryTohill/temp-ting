@@ -37,9 +37,6 @@ class TempLogSerializer(serializers.HyperlinkedModelSerializer):
         model = TempLog
         fields = ('id', 'url', 'description', 'start_date', 'end_date', 'team')
 
-    def retrieve(self, request):
-        return request
-
 
 class TempSerializer(serializers.HyperlinkedModelSerializer):
 
