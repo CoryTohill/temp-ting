@@ -1,10 +1,11 @@
 <h1>Graph Page</h1>
-<h4>(( graph.currentLog ))</h4>
-<h1>(( graph.currentLog.description ))</h1>
 
-<title>My first chart using FusionCharts Suite XT</title>
-<script type="text/javascript" src="http://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
-<script type="text/javascript" src="http://static.fusioncharts.com/code/latest/themes/fusioncharts.theme.fint.js?cacheBust=56"></script>
+<input type="number"
+        ng-model="graph.targetTemp"
+        placeholder="Target Temperature"
+        class="form-control">
 
-  <div id="chart-container">FusionCharts XT will load here!</div>
+<p ng-if="graph.targetTemp">Estimated Time Remaining: (( graph.timeRemaining ))</p>
+
+<div id="chart-container">FusionCharts XT will load here!</div>
 

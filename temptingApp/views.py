@@ -177,10 +177,10 @@ def calculate_cook_time(request):
     # gets the values of a polynomial equation that fits the temperature data points
     poly_equation = numpy.polyfit(temperatures, time_intervals, 1)
 
-    # plugs in the target_temp to the polynomial equation to determine cook time
+    # plugs in the target_temp to the polynomial equation to determine cook time in seconds
     estimated_cook_time = numpy.polyval(poly_equation, target_temp) * log_interval
 
-    return Response(estimated_cook_time, content_type="application/json", status=200)
+    return Response(round(estimated_cook_time), content_type="application/json", status=200)
 
 
 def get_latest_temp(request):

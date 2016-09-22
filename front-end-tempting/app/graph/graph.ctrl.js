@@ -11,8 +11,30 @@ app
             return $http.post(`${apiUrl}get_latest_temp/`, {'temp_log_id':graph.currentLog.id});
         };
 
+        calculateTimeRemaining = () => {
+            // get the estimated total cook time in seconds
+            $http.post(`${apiUrl}calculate_cook_time`,
+                        {'temp_log_id': graph.currentLog.id,
+                         'target_temp': graph.targetTemp})
+                .then(res => {
+                    cookTime = res.data;
+                    // subtracts the start date from the current time and convert to seconds
+                    timeElapsed = (Date.now() - new Date(graph.currentLog.start_date).getTime()) / 1000;
+                    timeRemianing = cookTime - timeElapsed;
 
-            // ********* Graph Controls ************
+                    graph.timeRemaining = convertToHoursMinutesSeconds(timeRemianing);
+                });
+        };
+
+        convertToHoursMinutesSeconds = (totalSeconds) => {
+            hours = Math.floor(totalSeconds/3600);
+            minutes = Math.floor((totalSeconds - hours*3600)/60);
+            seconds = Math.floor(totalSeconds - (hours*3600 + minutes*60));
+
+            return `${hours}h ${minutes}m ${seconds}s`;
+        };
+
+        // ********* Graph Controls ************
         getLatestTemp().then(res => startValue = res.data)
             .then(() => {
                 if (LoggerFactory.chartInitialized() === false) {
@@ -54,17 +76,18 @@ app
                                     "initialized": function(e) {
 
                                         function updateData() {
+                                            // calculate the remianing time
+                                            if (graph.targetTemp !== null) {
+                                                calculateTimeRemaining();
+                                            }
+
                                             getLatestTemp()
                                             .then(tempRes => {
                                                 // Get reference to the chart using its ID
                                                 var chartRef = FusionCharts("stockRealTimeChart");
-                                                    // calculate the amount of time to disply per data point
+                                                    // calculate the amount of time to display per data point
                                                     timeCounter += 5;
-                                                    hours = Math.floor(timeCounter/3600);
-                                                    minutes = Math.floor((timeCounter - hours*3600)/60);
-                                                    seconds = Math.floor(timeCounter - (hours*3600 + minutes*60));
-
-                                                    label = `${hours}h ${minutes}m ${seconds}s`;
+                                                    label = convertToHoursMinutesSeconds(timeCounter);
 
                                                     // Build Data String in format &label=...&value=...
                                                     strData = "&label=" + label + "&value=" + tempRes.data;
