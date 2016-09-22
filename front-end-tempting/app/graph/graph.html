@@ -1,11 +1,33 @@
-<h1>Graph Page</h1>
+<div class="container">
 
-<input type="number"
-        ng-model="graph.targetTemp"
-        placeholder="Target Temperature"
-        class="form-control">
+    <div class="panel-group">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2>(( graph.currentLog.description )) - (( graph.currentLog.start_date | date:'short' ))</h2>
+            </div>
+            <div class="panel-body">
 
-<p ng-if="graph.targetTemp">Estimated Time Remaining: (( graph.timeRemaining ))</p>
+                <div id="chart-container" class="col-xs-12">FusionCharts XT will load here!</div>
 
-<div id="chart-container">FusionCharts XT will load here!</div>
+                <div class="col-sm-6 text-center">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <label for="target">Target Temp:</label>
+                        <input type="number"
+                                ng-model="graph.targetTemp"
+                                name="target"
+                                class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <label class="" for="estimated">Estimated Time Remaining:</label>
+                    <p class="lead" name="estimated">(( graph.timeRemaining ))</p>
+                </div>
+                <div class="col-xs-12 text-center">
+                    <button ng-click="graph.endLog()"
+                            class="btn btn-lg btn-warning">End Log</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+</div>

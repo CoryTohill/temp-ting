@@ -34,6 +34,12 @@ app
             return `${hours}h ${minutes}m ${seconds}s`;
         };
 
+        graph.endLog = () => {
+            $http.post(`${apiUrl}stop_logging_temps/`,
+                       {"temp_log_id": graph.currentLog.id})
+                .then(() => $location.path('/tempLog'));
+        };
+
         // ********* Graph Controls ************
         getLatestTemp().then(res => startValue = res.data)
             .then(() => {

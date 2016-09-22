@@ -1,0 +1,27 @@
+body {
+    background-color: whitesmoke;
+}
+
+.navbar {
+    margin: 0;
+    border-radius: 0;
+}
+
+.homepage,
+.loginPanel {
+    margin-top: 20vh;
+}
+
+.groupName {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.glyphicon {
+    margin-top: 5px;
+}
+
+.panel-primary {
+    margin-top: 20px;
+}

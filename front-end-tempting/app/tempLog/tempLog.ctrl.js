@@ -46,7 +46,4 @@ app
             }
         };
 
-        tempLog.newLog = () => {
-            $location.path('/createLog')
-        }
     });
