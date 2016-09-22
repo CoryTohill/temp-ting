@@ -10,6 +10,7 @@
         <li ng-class="{ active: navBar.isActive('/')}"><a href="#/">Home</a></li>
         <li ng-class="{ active: navBar.isActive('/group')}"><a href="#/group" ng-show="navBar.loggedIn">My Groups</a></li>
         <li ng-class="{ active: navBar.isActive('/tempLog')}"><a href="#/tempLog" ng-show="navBar.loggedIn">My Logs</a></li>
+        <li ng-class="{ active: navBar.isActive('/createLog')}"><a href="#/createLog" ng-show="navBar.loggedIn">Start New Log</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li ng-class="{ active: navBar.isActive('/login')}"><a href="#/login" ng-show="!navBar.loggedIn">Login / Register</a></li>
