@@ -35,8 +35,9 @@ app
         };
 
         graph.endLog = () => {
-
-            $location.path('/tempLog')
+            $http.post(`${apiUrl}stop_logging_temps/`,
+                       {"temp_log_id": graph.currentLog.id})
+                .then(() => $location.path('/tempLog'));
         };
 
         // ********* Graph Controls ************
