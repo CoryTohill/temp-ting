@@ -13,7 +13,7 @@
                     <h4>(( log.description ))</h4>
                     <p>Started: (( log.start_date | date:'short' ))</p>
                     <p ng-if="log.end_date">Total Cook Time: (( log.total_hours ))h (( log.total_minutes ))m</p>
-                    <p ng-if="log.end_date==none">In Progress</p>
+                    <p ng-if="log.end_date==none" class="bg-success">In Progress</p>
                  </div>
             </div>
         </div>
