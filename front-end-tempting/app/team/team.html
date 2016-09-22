@@ -1,38 +1,51 @@
 <div class="container">
 
     <!-- My Groups Section -->
-    <div class="col-sm-6">
-        <h1 class="col-xs-12">My Groups</h1>
-        <div ng-repeat="group in team.allTeams | filter: team.currentUser"
-             class="col-xs-12">
-            <div class="col-xs-1">
-                 <button class="btn
-                                btn-xs
-                                btn-warning
-                                glyphicon
-                                glyphicon-minus"
-                         ng-click="team.removeTeam(group)"></button>
+    <div class="panel-group col-sm-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2>My Groups</h2>
             </div>
-            <p class="col-xs-10 groupName">(( group.name ))</p>
-            <p class="col-xs-10 col-xs-offset-1">(( group.description ))</p>
+            <div class="panel-body">
+                <div ng-repeat="group in team.allTeams | filter: team.currentUser"
+                     class="col-xs-12">
+                    <div class="col-xs-1">
+                         <button class="btn
+                                        btn-xs
+                                        btn-warning
+                                        glyphicon
+                                        glyphicon-minus"
+                                 ng-click="team.removeTeam(group)"></button>
+                    </div>
+                    <p class="col-xs-10 groupName">(( group.name ))</p>
+                    <p class="col-xs-10 col-xs-offset-1">(( group.description ))</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Other Groups Section -->
-    <div class="col-sm-6">
-        <h1 class="col-xs-12">Other Groups</h1>
-        <div ng-repeat="group in team.allTeams | filter: '!' + team.currentUser"
-             class="col-xs-12">
-            <div class="col-xs-1">
-                 <button class="btn
-                                btn-xs
-                                btn-primary
-                                glyphicon
-                                glyphicon-plus"
-                         ng-click="team.addTeam(group)"></button>
+    <!-- Other Groups Section -- >
+    <div class="panel-group col-sm-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2>Other Groups</h2>
             </div>
-            <p class="col-xs-10 groupName">(( group.name ))</p>
-            <p class="col-xs-10 col-xs-offset-1">(( group.description ))</p>
+            <div class="panel-body">
+                <div ng-repeat="group in team.allTeams | filter: '!' + team.currentUser"
+                     class="col-xs-12">
+                    <div class="col-xs-1">
+                         <button class="btn
+                                        btn-xs
+                                        btn-primary
+                                        glyphicon
+                                        glyphicon-plus"
+                                 ng-click="team.addTeam(group)"></button>
+                    </div>
+                    <p class="col-xs-10 groupName">(( group.name ))</p>
+                    <p class="col-xs-10 col-xs-offset-1">(( group.description ))</p>
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
