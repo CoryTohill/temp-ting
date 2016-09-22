@@ -1,13 +1,25 @@
-<h1>TempLog Page</h1>
+<div class="container">
 
-<div ng-repeat="(team, logs) in tempLog.logs">
-    <h2>(( team ))</h2>
-    <div ng-repeat="log in logs" ng-click="tempLog.selectLog(log)">
-        <h3>(( log.description ))</h3>
-        <p>Started: (( log.start_date | date:'short' ))</p>
-        <p ng-if="log.end_date">Total Cook Time: (( log.total_hours ))h (( log.total_minutes ))m</p>
-        <p ng-if="log.end_date==none">In Progress</p>
+    <button ng-click="tempLog.newLog()"
+            class="btn btn-info">Start New Log</button>
+
+    <div class="panel-group"
+         ng-repeat="(team, logs) in tempLog.logs">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2>(( team ))</h2>
+            </div>
+            <div class="panel-body">
+                 <div class="col-sm-4"
+                      ng-repeat="log in logs"
+                      ng-click="tempLog.selectLog(log)">
+                    <h4>(( log.description ))</h4>
+                    <p>Started: (( log.start_date | date:'short' ))</p>
+                    <p ng-if="log.end_date">Total Cook Time: (( log.total_hours ))h (( log.total_minutes ))m</p>
+                    <p ng-if="log.end_date==none">In Progress</p>
+                 </div>
+            </div>
+        </div>
     </div>
+
 </div>
-<button ng-click="tempLog.newLog()"
-        class="btn btn-primary">Create New Log</button>
