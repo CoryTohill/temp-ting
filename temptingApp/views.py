@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
+
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view, list_route
 from rest_framework.response import Response
@@ -73,8 +74,6 @@ class User(viewsets.ModelViewSet):
             return models.User.objects.all()
         else:
             return models.User.objects.filter(username=user)
-
-
 
 
 @api_view(['GET', 'POST'])
@@ -196,8 +195,9 @@ def get_latest_temp(request):
 def get_all_temps_by_templog(request):
     data = json.loads(request.body.decode("utf-8"))
     temp_log_id = data['temp_log_id']
-
+    print("------- temp log id---------", temp_log_id)
     # get all temps for a specific temp log
-    temps = [x.value for x in models.Temp.objects.filter(temp_log=temp_log_id)]
+    temps = [{"value":x.value} for x in models.Temp.objects.filter(temp_log=temp_log_id)]
 
-    return HttpResponse(temps, content_type="application/json", status=200)
+    json_temps = json.dumps({"temps" : temps})
+    return HttpResponse(json_temps, content_type ="application/json")
