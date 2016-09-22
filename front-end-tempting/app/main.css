@@ -1,10 +1,14 @@
+body {
+    background-color: whitesmoke;
+}
+
 .navbar {
     margin: 0;
     border-radius: 0;
 }
 
-.inline {
-    display: inline;
+.homepage {
+    margin-top: 20vh;
 }
 
 .groupName {
