@@ -7,7 +7,8 @@ body {
     border-radius: 0;
 }
 
-.homepage {
+.homepage,
+.loginPanel {
     margin-top: 20vh;
 }
 
