@@ -17,6 +17,8 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^start_logging_temps', csrf_exempt(views.start_logging_temps)),
     url(r'^stop_logging_temps', csrf_exempt(views.stop_logging_temps)),
+    url(r'^get_latest_temp', csrf_exempt(views.get_latest_temp)),
+    url(r'^get_all_temps_by_templog', csrf_exempt(views.get_all_temps_by_templog)),
     url(r'^login', csrf_exempt(views.user_login)),
     url(r'^calculate_cook_time', csrf_exempt(views.calculate_cook_time)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),

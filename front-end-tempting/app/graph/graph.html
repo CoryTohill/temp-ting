@@ -1,1 +1,11 @@
 <h1>Graph Page</h1>
+
+<input type="number"
+        ng-model="graph.targetTemp"
+        placeholder="Target Temperature"
+        class="form-control">
+
+<p ng-if="graph.targetTemp">Estimated Time Remaining: (( graph.timeRemaining ))</p>
+
+<div id="chart-container">FusionCharts XT will load here!</div>
+

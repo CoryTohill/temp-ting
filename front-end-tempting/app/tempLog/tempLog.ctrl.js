@@ -40,7 +40,13 @@ app
             });
 
         tempLog.selectLog = (log) => {
-            LoggerFactory.currentLog(log);
-            $location.path('/graph');
+            if (log.end_date === null) {
+                LoggerFactory.currentLog(log);
+                $location.path('/graph');
+            }
         };
+
+        tempLog.newLog = () => {
+            $location.path('/createLog')
+        }
     });
