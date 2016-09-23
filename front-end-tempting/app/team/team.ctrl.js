@@ -6,7 +6,7 @@ app
 
         RootFactory.getApiRoot()
             .then(root => {
-                $http.get(`${root.teams}`)
+                $http.get(root.teams)
                 .then(res => team.allTeams = res.data);
             });
 
@@ -27,5 +27,17 @@ app
             group.users.splice(userIndex, 1);
 
             updateTeamUserList(group.url, group.users);
+        };
+
+        team.createNewTeam = () => {
+            newTeam = {"name": team.newName,
+                       "description": team.newDescription,
+                       "users": [team.currentUser]};
+
+            team.allTeams.push(newTeam);
+
+            // update the database with new team
+            RootFactory.getApiRoot()
+                .then(root => $http.post(root.teams, newTeam));
         };
     });
